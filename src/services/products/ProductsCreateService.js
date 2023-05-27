@@ -5,24 +5,21 @@ class ProductsCreateService {
     this.productsRepository = productsRepository;
   }
 
-  async execute({ title, description, image, price, type }) {
+  async execute({ title, image, description, price, type }) {
     const productAlreadyExists = await this.productsRepository.findByTitle(
       title
     );
 
-    console.log(productAlreadyExists);
     if (productAlreadyExists) {
       throw new AppError('Este prato já está cadastrado.');
     }
-
     const productCreated = await this.productsRepository.create({
       title,
-      description,
       image,
+      description,
       price,
       type,
     });
-
     return productCreated;
   }
 }

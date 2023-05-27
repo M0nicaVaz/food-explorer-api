@@ -3,8 +3,8 @@ const DiskStorage = require('../../providers/DiskStorage');
 
 class ProductsRepository {
   async create({ title, description, image, price, type }) {
+    console.log(image);
     const diskStorage = new DiskStorage();
-
     const imageSaved = await diskStorage.saveFile(image);
 
     const productId = await knex('products').insert({
@@ -18,31 +18,30 @@ class ProductsRepository {
     return { id: productId };
   }
 
-  // async show(request, response) {
-  //   const { id } = request.params;
+  async show(request, response) {
+    const { id } = request.params;
 
-  //   const product = await knex('products').where({ id }).first();
-  //   // const tags = await knex('tags').where({ note_id: id }).orderBy('title');
+    const product = await knex('products').where({ id }).first();
 
-  //   return response.json({
-  //     ...product,
-  //   });
-  // }
+    return response.json({
+      ...product,
+    });
+  }
 
-  // async index(request, response) {
-  //   const products = knex
-  //     .column('id', 'title', 'description', 'image', 'price', 'type')
-  //     .select()
-  //     .from('products');
+  async index(request, response) {
+    const products = knex
+      .column('id', 'title', 'description', 'image', 'price', 'type')
+      .select()
+      .from('products');
 
-  //   return response.json(products);
-  // }
+    return response.json(products);
+  }
 
-  // async findById(id) {
-  //   const productId = await knex('products').where({ id }).first();
+  async findById(id) {
+    const productId = await knex('products').where({ id }).first();
 
-  //   return productId;
-  // }
+    return productId;
+  }
 
   async findByTitle(title) {
     const product = await knex('products').where({ title }).first();

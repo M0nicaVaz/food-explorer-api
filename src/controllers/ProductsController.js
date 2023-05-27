@@ -3,8 +3,9 @@ const ProductsCreateService = require('../services/products/ProductsCreateServic
 
 class ProductsController {
   async create(req, res) {
-    const { title, description, price, type } = JSON.parse(req.body.data);
-    const imageFilename = req.file.filename;
+    const { title, image, description, price, type } = JSON.parse(
+      req.body.data
+    );
 
     const productsRepository = new ProductsRepository();
     const productsCreateService = new ProductsCreateService(productsRepository);
@@ -12,7 +13,7 @@ class ProductsController {
     await productsCreateService.execute({
       title,
       description,
-      image: imageFilename,
+      image,
       price,
       type,
     });

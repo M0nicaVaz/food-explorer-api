@@ -13,7 +13,6 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/files', express.static(uploadConfig.UPLOADS_FOLDER));
-
 app.use(routes);
 
 app.use((error, request, response, next) => {
