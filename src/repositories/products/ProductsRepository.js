@@ -3,7 +3,6 @@ const DiskStorage = require('../../providers/DiskStorage');
 
 class ProductsRepository {
   async create({ title, description, image, price, type }) {
-    console.log(image);
     const diskStorage = new DiskStorage();
     const imageSaved = await diskStorage.saveFile(image);
 
@@ -16,25 +15,6 @@ class ProductsRepository {
     });
 
     return { id: productId };
-  }
-
-  async show(request, response) {
-    const { id } = request.params;
-
-    const product = await knex('products').where({ id }).first();
-
-    return response.json({
-      ...product,
-    });
-  }
-
-  async index(request, response) {
-    const products = knex
-      .column('id', 'title', 'description', 'image', 'price', 'type')
-      .select()
-      .from('products');
-
-    return response.json(products);
   }
 
   async findById(id) {
