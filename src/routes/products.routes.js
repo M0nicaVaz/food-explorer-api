@@ -10,8 +10,9 @@ const upload = multer(uploadConfig.MULTER);
 
 productsRoutes.use('/', upload.single('image'));
 productsRoutes.post('/', productsController.create);
-productsRoutes.put('/:id', productsController.update);
 productsRoutes.get('/', productsController.index);
+productsRoutes.put('/:id', productsController.update);
+productsRoutes.delete('/:id', productsController.delete);
 productsRoutes.get('/:id', productsController.show);
 
 module.exports = productsRoutes;

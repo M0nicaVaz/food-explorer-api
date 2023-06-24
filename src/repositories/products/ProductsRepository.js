@@ -2,7 +2,7 @@ const knex = require('../../database/knex');
 const DiskStorage = require('../../providers/DiskStorage');
 
 class ProductsRepository {
-  async create({ title, description, image, price, type }) {
+  async create({ title, description, ingredients, image, price, type }) {
     const diskStorage = new DiskStorage();
     const imageSaved = await diskStorage.saveFile(image);
 
@@ -13,6 +13,16 @@ class ProductsRepository {
       price,
       type,
     });
+
+    if (ingredients.length > 0) {
+      const ingredientsInsert = ingredients.map((name) => {
+        return {
+          product_id: productId[0],
+          name,
+        };
+      });
+      await knex('ingredients').insert(ingredientsInsert);
+    }
 
     return { id: productId };
   }

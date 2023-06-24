@@ -5,7 +5,7 @@ class ProductsCreateService {
     this.productsRepository = productsRepository;
   }
 
-  async execute({ title, image, description, price, type }) {
+  async execute({ title, image, ingredients, description, price, type }) {
     const productAlreadyExists = await this.productsRepository.findByTitle(
       title
     );
@@ -18,6 +18,7 @@ class ProductsCreateService {
       image,
       description,
       price,
+      ingredients,
       type,
     });
     return productCreated;

@@ -36,24 +36,35 @@ class ProductsController {
       await knex('products').update({ image: imageSaved }).where({ id });
     }
 
-    // await knex('ingredients').where('product_id', id).del();
+    console.log(ingredients);
 
-    // if (ingredients.length > 0) {
-    //   const ingredientsInsert = ingredients.map((name) => {
-    //     return {
-    //       product_id: id,
-    //       name,
-    //     };
-    //   });
-    //   await knex('ingredients').insert(ingredientsInsert);
-    // }
+    if (ingredients && ingredients.length > 0) {
+      await knex('ingredients').where({ product_id: id }).del();
+
+      const ingredientsInsert = ingredients.map((name) => {
+        return {
+          product_id: id,
+          name,
+        };
+      });
+      await knex('ingredients').insert(ingredientsInsert);
+    }
+
     return res.json({
       ...product,
     });
   }
 
+  async delete(req, res) {
+    const { id } = req.params;
+
+    await knex('products').where({ id }).delete();
+
+    return res.json();
+  }
+
   async create(req, res) {
-    const { title, image, description, price, type } = JSON.parse(
+    const { title, image, description, ingredients, price, type } = JSON.parse(
       req.body.data
     );
 
@@ -66,6 +77,7 @@ class ProductsController {
       image,
       price,
       type,
+      ingredients,
     });
 
     return res.status(201).json(data);
@@ -81,9 +93,13 @@ class ProductsController {
     const { id } = request.params;
 
     const product = await knex('products').where({ id }).first();
+    const ingredients = await knex('ingredients')
+      .where({ product_id: id })
+      .orderBy('name');
 
     return response.json({
       ...product,
+      ingredients,
     });
   }
 }
