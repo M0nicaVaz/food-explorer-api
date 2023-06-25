@@ -36,8 +36,6 @@ class ProductsController {
       await knex('products').update({ image: imageSaved }).where({ id });
     }
 
-    console.log(ingredients);
-
     if (ingredients && ingredients.length > 0) {
       await knex('ingredients').where({ product_id: id }).del();
 
@@ -85,8 +83,16 @@ class ProductsController {
 
   async index(request, response) {
     const products = await knex('products').select();
+    const ingredients = await knex('ingredients').select();
 
-    return response.json(products);
+    const productsWithIngredients = products.map((product) => {
+      const productIngredients = ingredients.filter(
+        (ingredient) => ingredient.product_id === product.id
+      );
+      return { ...product, ingredients: productIngredients };
+    });
+
+    return response.json(productsWithIngredients);
   }
 
   async show(request, response) {
