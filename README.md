@@ -7,8 +7,8 @@
 ## Routes
 
 ```bash
-/products #get-> list all products | post-> create products
-/products/:id #get -> list a single product by id
+/products #get-> list all products | #post -> create products
+/products/:id #get | #delete |#put -> single product by id
 /session #post -> create session
 /users  #post -> create user
 ```
